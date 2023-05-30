@@ -1,6 +1,4 @@
 import express from "express"
-import livros from './livrosRoutes'
-import autores from './autoresRoutes'
 import users from './usersRoutes'
 import jams from './jamsRoutes'
 
@@ -12,8 +10,6 @@ const routes = (app) => {
 
     app.use(
         express.json(),
-        livros,
-        autores,
         users,
         jams,
     )
