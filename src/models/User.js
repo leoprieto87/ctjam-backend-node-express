@@ -12,6 +12,7 @@ const usersSchema = new mongoose.Schema(
     isAdm: {type: Boolean, required: true},
     leftHanded: {type: Boolean, required: true},
     musicStyle: {type: String},
+    myJams: {type: mongoose.Schema.Types.ObjectId, ref: 'jams'},
     nickname: {type: String, required: true},
     phone: {type: String, required: true}
   },
