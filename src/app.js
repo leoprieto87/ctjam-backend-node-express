@@ -1,6 +1,7 @@
 import express from 'express'
 import db from './config/dbConnect'
 import routes from './routes'
+import cors from 'cors'
 
 db.on('error', console.log.bind(console, 'Erro de conexao com banco'))
 db.once('open', () =>{
@@ -9,7 +10,9 @@ db.once('open', () =>{
 
 const app = express()
 
-app.use(express.json())
+
+app.use(cors());
+app.use(express.json(cors()))
 
 routes(app)
 

@@ -34,13 +34,13 @@ class JamController {
     }
 
     static createJam = (req, res) => {
-        let livro = new jams(req.body)
+        let jam = new jams(req.body)
 
-        livro.save((err) => {
+        jam.save((err) => {
             if(err){
                 res.status(500).send({message: `Não conseguiu gravar no servidor: ${err.message}`})
             } else {
-                res.status(201).send(livro.toJSON)
+                res.status(201).send(jam.toJSON())
             }
         })
     }
@@ -49,6 +49,19 @@ class JamController {
         const id = req.params.id;
 
         jams.findByIdAndUpdate(id, {$set: req.body}, (err) => {
+            if(!err) {
+                res.status(200).send({message: 'Jam atualizado com sucesso'})
+            } else {
+                res.status(500).send({message: err.message})
+            }
+        })
+    }
+
+    static updateJamPlayList = (req, res) => {
+        const id = req.params.id;
+
+        jams.findByIdAndUpdate(id, {$push: { playList: req.body }},
+            { new: true }, (err) => {
             if(!err) {
                 res.status(200).send({message: 'Jam atualizado com sucesso'})
             } else {

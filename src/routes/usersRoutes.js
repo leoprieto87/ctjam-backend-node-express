@@ -7,7 +7,7 @@ const router = express.Router()
 router
     .get('/users', UsersController.listUsers)
     .post('/users/login/authToken', UsersController.loginUser)
-    .post('/users/login/authUser/:id', checkToken, UsersController.listLoggedUserById)
+    .post('/users/login/authUser/:id', checkToken, UsersController.listUserById)
     .get('/users/:id', UsersController.listUserById)
     .post('/users/register', UsersController.createUser)
     .put('/users/update/:id', UsersController.updateUser)
@@ -25,7 +25,6 @@ function checkToken(req, res, next) {
         const secret = process.env.SECRET
 
         jwt.verify(token, secret)
-
         next()
         
     } catch (error) {

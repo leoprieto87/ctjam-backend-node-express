@@ -116,8 +116,8 @@ class UsersController {
                         const token = jwt.sign({
                             id: user._id,
                         },
-                        secret)//send token
-                        res.status(200).send({message: `Logado com sucesso`, token })
+                        secret)//send token and id
+                        res.status(200).send({message: `Logado com sucesso`, userId: user._id, token })
                     } catch (error) {
                         res.status(500).send({message: `Aconteceu algum erro no servidor, tente novamente.` })
                     }
