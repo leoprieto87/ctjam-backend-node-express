@@ -40,20 +40,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var User_1 = __importDefault(require("../models/User"));
+var bcrypt_1 = __importDefault(require("bcrypt"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var UsersController = /** @class */ (function () {
     function UsersController() {
     }
     var _a;
     _a = UsersController;
     UsersController.listUsers = function (req, res) {
-        User_1.default.find(function (err, users) {
+        User_1.default.find(req, '-password -phone', function (err, users) {
             res.status(200).json(users);
-            console.log(err);
         });
     };
     UsersController.listUserById = function (req, res) {
         var id = req.params.id;
-        User_1.default.findById(id, function (err, users) {
+        User_1.default.findById(id, '-password -phone', function (err, users) {
             if (err) {
                 res.status(400).send({
                     message: "".concat(err.message, " id do Usu\u00E1rio n\u00E3o encontrado")
@@ -65,7 +66,7 @@ var UsersController = /** @class */ (function () {
         });
     };
     UsersController.createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        function verififyIfUserExists(phone) {
+        function verififyIfUserExistsAndCreate(email) {
             return __awaiter(this, void 0, void 0, function () {
                 var userToVerify, error_1;
                 return __generator(this, function (_b) {
@@ -73,7 +74,7 @@ var UsersController = /** @class */ (function () {
                         case 0:
                             _b.trys.push([0, 2, , 3]);
                             return [4 /*yield*/, User_1.default.findOne({
-                                    phone: phone // Procura um usuário com o telefone fornecido
+                                    email: email // Procura um usuário com o email fornecido
                                 })];
                         case 1:
                             userToVerify = _b.sent();
@@ -84,6 +85,7 @@ var UsersController = /** @class */ (function () {
                                 return [2 /*return*/, true]; // O usuário já está cadastrado
                             }
                             else {
+                                user.password = passwordHash;
                                 user.save(function (err) {
                                     if (err) {
                                         res.status(500).send({
@@ -94,7 +96,7 @@ var UsersController = /** @class */ (function () {
                                         res.status(201).send(User_1.default.toJSON);
                                     }
                                 });
-                                return [2 /*return*/, false]; // O usuário não está cadastrado e pode ser incluído ao banco
+                                return [2 /*return*/, null]; // O usuário não está cadastrado e pode ser incluído ao banco
                             }
                             return [3 /*break*/, 3];
                         case 2:
@@ -108,12 +110,21 @@ var UsersController = /** @class */ (function () {
                 });
             });
         }
-        var user, userPhoneRequest;
+        var user, salt, passwordHash, userEmailRequest;
         return __generator(_a, function (_b) {
-            user = new User_1.default(req.body);
-            userPhoneRequest = user.phone;
-            verififyIfUserExists(userPhoneRequest);
-            return [2 /*return*/];
+            switch (_b.label) {
+                case 0:
+                    user = new User_1.default(req.body);
+                    return [4 /*yield*/, bcrypt_1.default.genSalt(12)];
+                case 1:
+                    salt = _b.sent();
+                    return [4 /*yield*/, bcrypt_1.default.hash(user.password, salt)];
+                case 2:
+                    passwordHash = _b.sent();
+                    userEmailRequest = user.email;
+                    verififyIfUserExistsAndCreate(userEmailRequest);
+                    return [2 /*return*/];
+            }
         });
     }); };
     UsersController.updateUser = function (req, res) {
@@ -148,6 +159,65 @@ var UsersController = /** @class */ (function () {
             }
         });
     };
+    UsersController.loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var _b, email, password, user, checkPassword, secret, token;
+        return __generator(_a, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _b = req.body, email = _b.email, password = _b.password;
+                    if (!(email && password)) return [3 /*break*/, 5];
+                    return [4 /*yield*/, User_1.default.findOne({ email: email })];
+                case 1:
+                    user = _c.sent();
+                    if (!user) return [3 /*break*/, 3];
+                    return [4 /*yield*/, bcrypt_1.default.compare(password, user.password)];
+                case 2:
+                    checkPassword = _c.sent();
+                    if (!checkPassword) { //CHECK IF PASSWORD MATCH
+                        res.status(404).send({ message: "Senha Invalida" });
+                    }
+                    else {
+                        try {
+                            secret = process.env.SECRET;
+                            token = jsonwebtoken_1.default.sign({
+                                id: user._id,
+                            }, secret) //send token and id
+                            ;
+                            res.status(200).send({ message: "Logado com sucesso", userId: user._id, token: token });
+                        }
+                        catch (error) {
+                            res.status(500).send({ message: "Aconteceu algum erro no servidor, tente novamente." });
+                        }
+                    }
+                    return [3 /*break*/, 4];
+                case 3:
+                    res.status(404).send({ message: "usuario nao encontrado" });
+                    _c.label = 4;
+                case 4: return [3 /*break*/, 6];
+                case 5:
+                    res.status(400).send({ message: "\u00C9 obrigat\u00F3rio digitar e-mail e senha para efetuar login" });
+                    _c.label = 6;
+                case 6: return [2 /*return*/];
+            }
+        });
+    }); };
+    UsersController.listLoggedUserById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, user;
+        return __generator(_a, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    id = req.params.id;
+                    return [4 /*yield*/, User_1.default.findById(id, '-password')];
+                case 1:
+                    user = _b.sent();
+                    if (!user) {
+                        return [2 /*return*/, res.status(404).send({ message: 'Usuário não encontrado' })];
+                    }
+                    res.status(200).send(user);
+                    return [2 /*return*/];
+            }
+        });
+    }); };
     return UsersController;
 }());
 exports.default = UsersController;

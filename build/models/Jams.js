@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
-var jamsSchema = new mongoose_1.default.Schema({
+var jamSchema = new mongoose_1.default.Schema({
     data: { type: String, required: true },
     name: { type: String, required: true },
     theme: { type: String, required: true },
@@ -13,20 +13,22 @@ var jamsSchema = new mongoose_1.default.Schema({
     image: { type: String, required: true },
     playList: [
         {
-            artist: { type: String, required: true },
-            song: { type: String, required: true },
             usersBand: {
-                vocal: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users', required: true },
-                guitar: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users', required: true },
-                guitar2: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users', required: true },
-                bass: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users', required: true },
-                drums: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users', required: true },
-                keys: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users', required: true },
+                vocal: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users' },
+                guitar: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users' },
+                guitar2: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users' },
+                bass: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users' },
+                drums: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users' },
+                keys: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'users' },
             },
+            artistName: { type: String, required: true },
+            songName: { type: String, required: true },
+            _id: { type: String }
         },
     ],
     urlPlayList: { type: String, required: true },
     isActive: { type: Boolean, required: true },
+    step: { type: String, enum: ['suggestion', 'choice'], required: true },
 });
-var jams = mongoose_1.default.model('jams', jamsSchema);
+var jams = mongoose_1.default.model('jams', jamSchema);
 exports.default = jams;
