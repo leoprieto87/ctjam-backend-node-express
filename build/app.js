@@ -15,4 +15,9 @@ var app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json((0, cors_1.default)()));
 (0, routes_1.default)(app);
+var port = process.env.PORT;
+app.listen(port, function () {
+    console.log("Servidor escutando em http://localhost:".concat(port));
+    // console.log(`Servidor escutando em http://localhost:${port}`)
+});
 exports.default = app;
