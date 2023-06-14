@@ -7,12 +7,16 @@ var mongoose_1 = __importDefault(require("mongoose"));
 var usersSchema = new mongoose_1.default.Schema({
     id: { type: String },
     name: { type: String, required: true },
+    password: { type: String, required: true },
     email: { type: String, required: true },
+    image: { type: String },
     instagram: { type: String },
-    instrument: { type: String, required: true },
+    instrument: { type: String },
+    isAdm: { type: Boolean },
     leftHanded: { type: Boolean, required: true },
     musicStyle: { type: String },
-    nickname: { type: String, required: true },
+    myJams: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'jams' },
+    nickname: { type: String },
     phone: { type: String, required: true }
 }, {
     versionKey: false

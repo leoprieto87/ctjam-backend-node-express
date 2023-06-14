@@ -8,12 +8,12 @@ const usersSchema = new mongoose.Schema(
     email: {type: String, required: true},
     image: {type: String},
     instagram: {type: String},
-    instrument: {type: String, required: true},
-    isAdm: {type: Boolean, required: true},
+    instrument: {type: String},
+    isAdm: {type: Boolean},
     leftHanded: {type: Boolean, required: true},
     musicStyle: {type: String},
     myJams: {type: mongoose.Schema.Types.ObjectId, ref: 'jams'},
-    nickname: {type: String, required: true},
+    nickname: {type: String},
     phone: {type: String, required: true}
   },
   {

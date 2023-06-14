@@ -36,13 +36,13 @@ var JamController = /** @class */ (function () {
         });
     };
     JamController.createJam = function (req, res) {
-        var livro = new Jams_1.default(req.body);
-        livro.save(function (err) {
+        var jam = new Jams_1.default(req.body);
+        jam.save(function (err) {
             if (err) {
                 res.status(500).send({ message: "N\u00E3o conseguiu gravar no servidor: ".concat(err.message) });
             }
             else {
-                res.status(201).send(livro.toJSON);
+                res.status(201).send(jam.toJSON());
             }
         });
     };
@@ -55,6 +55,42 @@ var JamController = /** @class */ (function () {
             else {
                 res.status(500).send({ message: err.message });
             }
+        });
+    };
+    JamController.addSongToJamPlayList = function (req, res) {
+        var id = req.params.id;
+        Jams_1.default.findByIdAndUpdate(id, { $push: { playList: req.body } }, { new: true }, function (err) {
+            if (!err) {
+                res.status(200).send({ message: 'Jam atualizado com sucesso' });
+            }
+            else {
+                res.status(500).send({ message: err.message });
+            }
+        });
+    };
+    JamController.updateSongById = function (req, res) {
+        var jamId = req.params.jamId;
+        var playlistItemId = req.params.playlistItemId;
+        Jams_1.default.findById(jamId, function (err, jam) {
+            if (err) {
+                return res.status(500).send({ message: err.message });
+            }
+            if (!jam) {
+                return res.status(404).send({ message: "Jam não encontrada" });
+            }
+            var playlistItem = jam.playList.id(playlistItemId);
+            if (!playlistItem) {
+                return res.status(404).send({ message: "Item da playlist não encontrado" });
+            }
+            playlistItem.artistName = req.body.artistName;
+            playlistItem.songName = req.body.songName;
+            playlistItem.usersBand = req.body.usersBand;
+            jam.save(function (err, updatedJam) {
+                if (err) {
+                    return res.status(500).send({ message: err.message });
+                }
+                res.status(200).send({ message: "Música atualizada com sucesso", jam: updatedJam });
+            });
         });
     };
     JamController.deleteJam = function (req, res) {

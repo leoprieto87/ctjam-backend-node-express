@@ -57,7 +57,7 @@ class JamController {
         })
     }
 
-    static updateJamPlayList = (req, res) => {
+    static addSongToJamPlayList = (req, res) => {
         const id = req.params.id;
 
         jams.findByIdAndUpdate(id, {$push: { playList: req.body }},
@@ -70,6 +70,36 @@ class JamController {
         })
     }
 
+    static updateSongById = (req, res) => {
+        const jamId = req.params.jamId;
+        const playlistItemId = req.params.playlistItemId;
+      
+        jams.findById(jamId, (err, jam) => {
+          if (err) {
+            return res.status(500).send({ message: err.message });
+          }
+          if (!jam) {
+            return res.status(404).send({ message: "Jam não encontrada" });
+          }
+      
+          const playlistItem = jam.playList.id(playlistItemId);
+          if (!playlistItem) {
+            return res.status(404).send({ message: "Item da playlist não encontrado" });
+          }
+      
+          playlistItem.artistName = req.body.artistName;
+          playlistItem.songName = req.body.songName;
+          playlistItem.usersBand = req.body.usersBand;
+      
+          jam.save((err, updatedJam) => {
+            if (err) {
+              return res.status(500).send({ message: err.message });
+            }
+            res.status(200).send({ message: "Música atualizada com sucesso", jam: updatedJam });
+          });
+        });
+      };
+    
     static deleteJam = (req, res) => {
         const id = req.params.id
 
@@ -82,13 +112,6 @@ class JamController {
         })
     }
 
-    // static listarJamPorEditora = (req, res) => {
-    //     const editora = req.query.editora
-        
-    //     jams.find({'editora': editora}, {}, (err, jams) => {
-    //         res.status(200).send(jams)
-    //     })
-    // }
 }
 
 export default JamController

@@ -10,15 +10,16 @@ const jamSchema = new mongoose.Schema({
   playList: [
     {
       usersBand: {
-        vocal: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
-        guitar: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
-        guitar2: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
-        bass: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
-        drums: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
-        keys: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
+        vocal: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+        guitar: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+        guitar2: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+        bass: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+        drums: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+        keys: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
       },
-      artist: { type: String, required: true },
-      song: { type: String, required: true },
+      artistName: { type: String, required: true },
+      songName: { type: String, required: true },
+      _id: { type: String }
     },
   ],
   urlPlayList: { type: String, required: true },

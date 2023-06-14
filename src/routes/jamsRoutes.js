@@ -9,7 +9,8 @@ router
     .get('/jams/:id', JamController.listJamById)
     .post('/jams/create', JamController.createJam)
     .put('/jams/update/:id', JamController.updateJam)
-    .put('/jams/update-playlist/:id', JamController.updateJamPlayList)
+    .put('/jams/addSongToJamPlayList/:id', JamController.addSongToJamPlayList)
+    .put('/jam/:jamId/playList/:playlistItemId', JamController.updateSongById)
     .delete('/jams/:id', JamController.deleteJam)
 
 export default router
