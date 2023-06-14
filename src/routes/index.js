@@ -1,6 +1,6 @@
 import express from "express"
-import users from './usersRoutes'
-import jams from './jamsRoutes'
+import users from './usersRoutes.js'
+import jams from './jamsRoutes.js'
 
 
 const routes = (app) => {

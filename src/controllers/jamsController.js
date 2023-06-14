@@ -1,4 +1,4 @@
-import jams from "../models/Jams"
+import jams from "../models/Jams.js"
 
 const populateOptions = [
     { path: 'playList.usersBand.vocal', select: 'name' },

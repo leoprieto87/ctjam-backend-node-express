@@ -1,5 +1,5 @@
 import express from "express";
-import JamController from "../controllers/jamsController";
+import JamController from "../controllers/jamsController.js";
 
 const router = express.Router()
 
