@@ -5,7 +5,7 @@ import jams from './jamsRoutes.js'
 
 const routes = (app) => {
     app.route('/').get((req, res) => {
-        res.status(200).send({titulo: 'Curso de node, url raiz'})
+        res.status(200).send({titulo: 'backend ctjam, url raiz sem parametros'})
     })
 
     app.use(

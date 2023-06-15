@@ -20,7 +20,6 @@ const port = 21041
 
 app.listen(port, () => {
     console.log(`Servidor escutando em http://localhost:${port}`)
-    // console.log(`Servidor escutando em http://localhost:${port}`)
 })
 
 export default app

@@ -1,6 +1,9 @@
 import express from "express";
 import UsersController from "../controllers/usersController.js";
 import jwt from "jsonwebtoken"
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const router = express.Router()
 
@@ -23,7 +26,6 @@ function checkToken(req, res, next) {
 
     try {
         const secret = process.env.SECRET
-
         jwt.verify(token, secret)
         next()
         
