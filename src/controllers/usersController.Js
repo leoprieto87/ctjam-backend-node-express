@@ -27,7 +27,6 @@ class UsersController {
     }
 
     static createUser = async (req, res) => {
-        // let userRequest = req.body
         let user = new users(req.body)
         
         const salt = await bcrypt.genSalt(12)
