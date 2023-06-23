@@ -1,5 +1,5 @@
 import users from "../models/User.js"
-import bcrypt from "bcrypt"
+import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 
@@ -30,8 +30,8 @@ class UsersController {
         
         let user = new users(req.body)
         
-        const salt = await bcrypt.genSalt(12)
-        const passwordHash = await bcrypt.hash(user.password, salt)               
+        const salt = await bcryptjs.genSalt(12)
+        const passwordHash = await bcryptjs.hash(user.password, salt)               
 
         async function verififyIfUserExistsAndCreate(email) {
             try {
@@ -109,7 +109,7 @@ class UsersController {
             const user = await users.findOne({ email: email})
            
             if (user) { //CHECK IF USERS EXISTS AND LOGIN
-                const checkPassword = await bcrypt.compare(password, user.password)
+                const checkPassword = await bcryptjs.compare(password, user.password)
 
                 if (!checkPassword) {//CHECK IF PASSWORD MATCH
                     res.status(404).send({message: `Senha Invalida` })
