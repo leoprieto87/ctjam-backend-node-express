@@ -6,7 +6,7 @@ const jamSchema = new mongoose.Schema({
   theme: { type: String, required: true },
   address: { type: String, required: true },
   description: { type: String, required: true },
-  image: { type: String, required: true },
+  image: { type: String },
   playList: [
     {
       usersBand: {
@@ -22,7 +22,7 @@ const jamSchema = new mongoose.Schema({
       _id: { type: String }
     },
   ],
-  urlPlayList: { type: String, required: true },
+  urlPlayList: { type: String },
   isActive: { type: Boolean, required: true },
   step: { type: String, enum: ['suggestion', 'choice'], required: true },
 });

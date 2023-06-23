@@ -1,7 +1,7 @@
 import express from "express";
 import UsersController from "../controllers/usersController.js";
 import jwt from "jsonwebtoken"
-import dotenv from 'dotenv'
+import dotenv from "dotenv"
 
 dotenv.config()
 
@@ -26,6 +26,7 @@ function checkToken(req, res, next) {
 
     try {
         const secret = process.env.SECRET
+
         jwt.verify(token, secret)
         next()
         
