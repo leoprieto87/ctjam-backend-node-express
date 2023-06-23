@@ -16,7 +16,7 @@ app.use(express.json(cors()))
 
 routes(app)
 
-const port = 21041
+const port = 21092
 
 app.listen(port, () => {
     console.log(`Servidor iniciado em http://localhost:${port}`)
