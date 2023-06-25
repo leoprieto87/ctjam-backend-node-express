@@ -16,10 +16,15 @@ app.use(express.json(cors()))
 
 routes(app)
 
-const port = 21092
+const port = 21034
+
+const dbUser = process.env.DB_USER
+const dbPassword = process.env.DB_PASSWORD
 
 app.listen(port, () => {
     console.log(`Servidor iniciado em http://localhost:${port}`)
+    console.log('dbUser', dbUser)
+console.log('dbPassword', dbPassword)
 })
 
 export default app
